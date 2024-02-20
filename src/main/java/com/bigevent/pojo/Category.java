@@ -11,4 +11,5 @@ public class Category {
     private Integer createUser;//创建人ID
     private LocalDateTime createTime;//创建时间
     private LocalDateTime updateTime;//更新时间
+
 }
