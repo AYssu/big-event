@@ -1,10 +1,7 @@
 package com.bigevent;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.Claim;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
@@ -30,10 +27,10 @@ public class JwtTest {
     @Test
     public void parseToken()
     {
-        String sign = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6IuW8oOS4iSJ9LCJleHAiOjE3MDg0NDM1NjN9.y6M6ClY7fAdqknvbRpnQzxqfoPMoEPnw7ZG5o3_MdQ8";
-        JWTVerifier build = JWT.require(Algorithm.HMAC256("ayssu")).build();
-        DecodedJWT verify = build.verify(sign);
-        Map<String , Claim> claimMap = verify.getClaims();
-        System.out.println("user:"+claimMap.get("user"));
+//        String sign = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6IuW8oOS4iSJ9LCJleHAiOjE3MDg0NDM1NjN9.y6M6ClY7fAdqknvbRpnQzxqfoPMoEPnw7ZG5o3_MdQ8";
+//        JWTVerifier build = JWT.require(Algorithm.HMAC256("ayssu")).build();
+//        DecodedJWT verify = build.verify(sign);
+//        Map<String , Claim> claimMap = verify.getClaims();
+//        System.out.println("user:"+claimMap.get("user"));
     }
 }

@@ -16,4 +16,6 @@ public interface CategoryService {
     Category findCategoryByID(int cid);
 
     void update(Category category);
+
+    void delectCategoryByID(int i);
 }

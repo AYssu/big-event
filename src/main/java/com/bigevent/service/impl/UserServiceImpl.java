@@ -8,17 +8,24 @@ import com.bigevent.utils.JwtUtil;
 import com.bigevent.utils.Md5Util;
 import com.bigevent.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
     @Override
     public User findByUserName(String username) {
         return userMapper.findByUserName(username);
@@ -41,6 +48,8 @@ public class UserServiceImpl implements UserService {
             map.put("id",user.getId());
             map.put("username",user.getUsername());
             String s = JwtUtil.genToken(map);
+            ValueOperations<String, String> stringStringValueOperations = stringRedisTemplate.opsForValue();
+            stringStringValueOperations.set(s,s,1, TimeUnit.HOURS);
             return Result.success(s);
         }else {
             return Result.error("用户账号或密码错误");

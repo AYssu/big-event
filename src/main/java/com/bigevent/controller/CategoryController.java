@@ -4,6 +4,7 @@ import com.bigevent.pojo.Category;
 import com.bigevent.pojo.Result;
 import com.bigevent.service.CategoryService;
 import com.bigevent.utils.ThreadLocalUtil;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -61,4 +62,16 @@ public class CategoryController {
         categoryService.update(category);
         return Result.success();
     }
+
+    @DeleteMapping
+    public Result delete(String id){
+        Category category = categoryService.findCategoryByID(Integer.parseInt(id));
+        if (category==null)
+        {
+            return Result.error("无分类");
+        }
+        categoryService.delectCategoryByID(Integer.parseInt(id));
+        return Result.success();
+    }
+
 }

@@ -9,6 +9,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +24,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
     @PostMapping("/register")
     public Result register(@Pattern(regexp = "^\\S{4,16}$") String username ,@Pattern(regexp = "^\\S{4,16}$") String password)
     {
@@ -37,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Result login(@Pattern(regexp = "^\\S{4,16}$") String username,@Pattern(regexp = "^\\S{4,16}$") String password)
+    public Result login(@Pattern(regexp = "^\\S{2,16}$") String username,@Pattern(regexp = "^\\S{2,16}$") String password)
     {
         User user = userService.findByUserName(username);
         if (user==null)
@@ -76,7 +80,7 @@ public class UserController {
     }
 
     @PatchMapping("updatePwd")
-    public Result updatePwd(@RequestBody @NotEmpty Map<String,String> map)
+    public Result updatePwd(@RequestBody @NotEmpty Map<String,String> map,@RequestHeader("Authorization") String token)
     {
         String oldPwd = map.get("old_pwd");
         String newPwd = map.get("new_pwd");
@@ -98,6 +102,9 @@ public class UserController {
             return Result.error("原密码错误！");
         }
 
+        ValueOperations<String, String> stringStringValueOperations = stringRedisTemplate.opsForValue();
+        RedisOperations<String, String> operations = stringStringValueOperations.getOperations();
+        operations.delete(token);
         return userService.updatePwd(user.getId(),newPwd);
     }
 
